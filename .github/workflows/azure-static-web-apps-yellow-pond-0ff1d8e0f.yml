@@ -42,7 +42,7 @@ jobs:
         run: |
           TOKEN=$(az staticwebapp secrets list \
             --name "${{ secrets.AZURE_SWA_NAME }}" \
-            --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
             --query "properties.apiKey" -o tsv)
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
@@ -67,3 +67,8 @@ jobs:
           app_location: ${{ env.APP_LOCATION }}
           output_location: ${{ env.OUTPUT_LOCATION }}
           api_location: ${{ env.API_LOCATION }}
+
+      - name: logout
+        if: always()
+        run: |
+          az logout
