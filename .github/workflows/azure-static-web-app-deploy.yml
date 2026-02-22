@@ -32,14 +32,13 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Confirm SWA exists where we think it does
+      - name: Show SWA info
         shell: bash
         run: |
-          set - euo pipefail
           az staticwebapp show \
             --name "${{ secrets.AZURE_SWA_NAME }}" \
             --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
-            --query "{name:name, defaultHostName:defaultHostName, location:location}" -o table
+            -o table
 
       - name: Ensure Azure CLI static web app extension
         run: |
@@ -64,6 +63,7 @@ jobs:
           fi
 
           echo "length: ${#TOKEN}"
+          echo "::add-mask::$TOKEN"
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node
