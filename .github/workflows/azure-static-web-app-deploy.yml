@@ -32,25 +32,15 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Show SWA info
-        shell: bash
-        run: |
-          az staticwebapp show \
-            --name "${{ secrets.AZURE_SWA_NAME }}" \
-            --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
-            -o table
-
       - name: Ensure Azure CLI static web app extension
         run: |
           az extension add --name staticwebapp --upgrade
 
-      - name: get SWA deploymnet token (runtime)
+      - name: get SWA deployment token (runtime)
         id: swa_token
         shell: bash
         run: |
           set -euo pipefail
-
-          az account show --query "{name:name, id:id, tenantId:tenantId}" -o table
 
           TOKEN=$(az staticwebapp secrets list \
             --name "${{ secrets.AZURE_SWA_NAME }}" \
@@ -62,7 +52,6 @@ jobs:
             exit 1
           fi
 
-          echo "length: ${#TOKEN}"
           echo "::add-mask::$TOKEN"
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
 
