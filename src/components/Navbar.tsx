@@ -6,6 +6,7 @@ import {
   Drawer,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -47,12 +48,10 @@ const Navbar: React.FC = () => {
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         <List sx={{ width: 250 }}>
           {menuItems.map((item) => (
-            <ListItem
-              button
-              key={item}
-              onClick={toggleDrawer(false)}
-            >
-              <ListItemText primary={item} />
+            <ListItem disablePadding key={item}>
+              <ListItemButton onClick={toggleDrawer(false)}>
+                <ListItemText primary={item} />
+              </ListItemButton>
             </ListItem>
           ))}
         </List>
