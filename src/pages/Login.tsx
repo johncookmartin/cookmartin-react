@@ -1,18 +1,39 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Button, Card, Container, Typography } from '@mui/material';
-import { loginRequest } from '../authConfig';
-import { useMsal } from '@azure/msal-react';
+import { loginRequest } from '../auth/authConfig';
+import { useIsAuthenticated, useMsal } from '@azure/msal-react';
 import CookMartinLogo from '../assets/CookMartinLogo.png';
+
+const sanitizeReturnTo = (value: string | null): string => {
+  if (!value || !value.startsWith('/') || value.startsWith('//')) {
+    return '/';
+  }
+
+  if (value === '/login') {
+    return '/';
+  }
+
+  return value;
+};
 
 const Login: React.FC = () => {
   const { instance } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const returnTo = sanitizeReturnTo(params.get('returnTo'));
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(returnTo, { replace: true });
+    }
+  }, [isAuthenticated, navigate, returnTo]);
 
   const handleLogin = async () => {
     try {
       await instance.loginRedirect(loginRequest);
-      navigate('/');
     } catch (error) {
       console.log(error);
     }

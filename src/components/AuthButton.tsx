@@ -1,6 +1,6 @@
 import { useMsal } from '@azure/msal-react';
 import { Button, useTheme } from '@mui/material';
-import { loginRequest } from '../authConfig';
+import { loginRequest } from '../auth/authConfig';
 
 const AuthButton: React.FC = () => {
   const { instance, accounts } = useMsal();

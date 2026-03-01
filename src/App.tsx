@@ -5,6 +5,7 @@ import ProtectedRoute from './layouts/ProtectedLayout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import AdminHome from './pages/AdminHome';
+import BlobUpload from './pages/BlobUpload';
 
 const theme = createTheme({
   palette: {
@@ -42,6 +43,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/admin-home" element={<AdminHome />} />
+              <Route path="/blob-upload" element={<BlobUpload />} />
             </Route>
           </Route>
         </Routes>
