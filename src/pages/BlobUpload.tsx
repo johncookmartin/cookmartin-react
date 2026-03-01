@@ -1,39 +1,58 @@
 import React, { useState } from 'react';
+import { Alert, Box, Button, Card, Container, Typography } from '@mui/material';
 import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  Container,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { useUploadPdfMutation } from '../redux/endpoints/blob/blobApi';
+  useUploadJohnResumeMutation,
+  useUploadJacquieResumeMutation,
+} from '../redux/endpoints/blob/blobApi';
+import type { UploadResumeRequest } from '../redux/endpoints/blob/types';
 
 const BlobUpload: React.FC = () => {
-  const [uploadPdf, uploadResult] = useUploadPdfMutation();
+  const [uploadJohnResume, johnResumeResult] = useUploadJohnResumeMutation();
+  const [uploadJacquieResume, jacquieResumeResult] =
+    useUploadJacquieResumeMutation();
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadPath, setUploadPath] = useState<string>('test/uploads');
+  const [johnResumeFile, setJohnResumeFile] = useState<File | null>(null);
+  const [jacquieResumeFile, setJacquieResumeFile] = useState<File | null>(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleJohnFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
+      setJohnResumeFile(file);
     }
   };
 
-  const handleUpload = async () => {
-    if (!selectedFile) return;
+  const handleJacquieFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setJacquieResumeFile(file);
+    }
+  };
+
+  const handleJohnUpload = async () => {
+    if (!johnResumeFile) return;
 
     try {
-      const result = await uploadPdf({
-        file: selectedFile,
-        path: uploadPath,
-      }).unwrap();
-      console.log('Upload successful:', result);
+      const result = await uploadJohnResume({
+        file: johnResumeFile,
+      } as UploadResumeRequest).unwrap();
+      console.log('John resume upload successful:', result);
     } catch (error) {
-      console.error('Upload failed:', error);
+      console.error('John resume upload failed:', error);
+    }
+  };
+
+  const handleJacquieUpload = async () => {
+    if (!jacquieResumeFile) return;
+
+    try {
+      const result = await uploadJacquieResume({
+        file: jacquieResumeFile,
+      } as UploadResumeRequest).unwrap();
+      console.log('Jacquie resume upload successful:', result);
+    } catch (error) {
+      console.error('Jacquie resume upload failed:', error);
     }
   };
 
@@ -47,56 +66,93 @@ const BlobUpload: React.FC = () => {
           py: 4,
         }}
       >
-        <Typography variant="h4">Blob Upload</Typography>
+        <Typography variant="h4">Resume Upload</Typography>
 
         <Card sx={{ p: 3 }}>
-          {' '}
           <Typography variant="h6" sx={{ mb: 2 }}>
-            Upload PDF File
+            Upload John's Resume
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <TextField
-              label="Upload Path"
-              value={uploadPath}
-              onChange={(e) => setUploadPath(e.target.value)}
-              fullWidth
-              helperText="Destination path for the uploaded file"
-            />
-
             <Button variant="outlined" component="label" fullWidth>
-              {selectedFile ? selectedFile.name : 'Select PDF File'}
+              {johnResumeFile ? johnResumeFile.name : 'Select Resume File'}
               <input
                 type="file"
                 hidden
-                accept=".pdf,application/pdf"
-                onChange={handleFileChange}
+                accept=".pdf,application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                onChange={handleJohnFileChange}
               />
             </Button>
 
             <Button
               variant="contained"
-              onClick={handleUpload}
-              disabled={!selectedFile || uploadResult.isLoading}
+              onClick={handleJohnUpload}
+              disabled={!johnResumeFile || johnResumeResult.isLoading}
               fullWidth
             >
-              {uploadResult.isLoading ? 'Uploading...' : 'Upload PDF'}
+              {johnResumeResult.isLoading ? 'Uploading...' : 'Upload Resume'}
             </Button>
 
-            {uploadResult.isSuccess && uploadResult.data && (
+            {johnResumeResult.isSuccess && johnResumeResult.data && (
               <Alert severity="success">
                 <Typography variant="body2">Upload successful!</Typography>
                 <Typography variant="caption" component="div">
-                  URL: {uploadResult.data.url}
+                  URL: {johnResumeResult.data.url}
                 </Typography>
                 <Typography variant="caption" component="div">
-                  Path: {uploadResult.data.path}
+                  Path: {johnResumeResult.data.path}
                 </Typography>
               </Alert>
             )}
 
-            {uploadResult.isError && (
+            {johnResumeResult.isError && (
               <Alert severity="error">
-                Upload failed: {JSON.stringify(uploadResult.error)}
+                Upload failed: {JSON.stringify(johnResumeResult.error)}
+              </Alert>
+            )}
+          </Box>
+        </Card>
+
+        <Card sx={{ p: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Upload Jacquie's Resume
+          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Button variant="outlined" component="label" fullWidth>
+              {jacquieResumeFile
+                ? jacquieResumeFile.name
+                : 'Select Resume File'}
+              <input
+                type="file"
+                hidden
+                accept=".pdf,application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                onChange={handleJacquieFileChange}
+              />
+            </Button>
+
+            <Button
+              variant="contained"
+              onClick={handleJacquieUpload}
+              disabled={!jacquieResumeFile || jacquieResumeResult.isLoading}
+              fullWidth
+            >
+              {jacquieResumeResult.isLoading ? 'Uploading...' : 'Upload Resume'}
+            </Button>
+
+            {jacquieResumeResult.isSuccess && jacquieResumeResult.data && (
+              <Alert severity="success">
+                <Typography variant="body2">Upload successful!</Typography>
+                <Typography variant="caption" component="div">
+                  URL: {jacquieResumeResult.data.url}
+                </Typography>
+                <Typography variant="caption" component="div">
+                  Path: {jacquieResumeResult.data.path}
+                </Typography>
+              </Alert>
+            )}
+
+            {jacquieResumeResult.isError && (
+              <Alert severity="error">
+                Upload failed: {JSON.stringify(jacquieResumeResult.error)}
               </Alert>
             )}
           </Box>

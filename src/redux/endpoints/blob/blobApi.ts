@@ -1,26 +1,44 @@
 import { api } from '../../api';
-import type { UploadPdfRequest, UploadPdfResponse } from './types';
+import type { UploadResumeRequest, UploadResumeResponse } from './types';
 
 /**
  * Blob storage endpoints for file upload operations.
  *
  * This file demonstrates the injectEndpoints pattern for mutations with file uploads.
- *
+ * Each endpoint accepts a File and returns the upload result (ok, url, path).
  */
 const baseUrl = '/api/blob';
 
 export const blobApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    uploadPdf: builder.mutation<UploadPdfResponse, UploadPdfRequest>({
-      query: ({ file, path }) => {
+    uploadJohnResume: builder.mutation<
+      UploadResumeResponse,
+      UploadResumeRequest
+    >({
+      query: ({ file }) => {
         const formData = new FormData();
         formData.append('file', file);
 
         return {
-          url: `${baseUrl}/upload/pdf`,
+          url: `${baseUrl}/upload/john-resume`,
           method: 'POST',
           body: formData,
-          params: { path }, // Query param: ?path=...
+        };
+      },
+      // Private endpoint - requires authentication (default behavior)
+    }),
+    uploadJacquieResume: builder.mutation<
+      UploadResumeResponse,
+      UploadResumeRequest
+    >({
+      query: ({ file }) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        return {
+          url: `${baseUrl}/upload/jacquie-resume`,
+          method: 'POST',
+          body: formData,
         };
       },
       // Private endpoint - requires authentication (default behavior)
@@ -28,4 +46,5 @@ export const blobApi = api.injectEndpoints({
   }),
 });
 
-export const { useUploadPdfMutation } = blobApi;
+export const { useUploadJohnResumeMutation, useUploadJacquieResumeMutation } =
+  blobApi;

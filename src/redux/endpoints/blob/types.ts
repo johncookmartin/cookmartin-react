@@ -1,11 +1,10 @@
 // Request and response types for blob storage endpoints
 
-export interface UploadPdfRequest {
+export interface UploadResumeRequest {
   file: File;
-  path: string;
 }
 
-export interface UploadPdfResponse {
+export interface UploadResumeResponse {
   ok: boolean;
   url: string;
   path: string;
