@@ -5,10 +5,17 @@ import { MsalProvider } from '@azure/msal-react';
 import { Provider } from 'react-redux';
 import './index.css';
 import App from './App.tsx';
-import { msalConfig } from './authConfig';
-import { store } from '../redux/store.ts';
+import { msalConfig } from './auth/authConfig.ts';
+import { store } from './redux/store.ts';
+import { initApiAuth } from './redux/api.ts';
 
 const msalInstance = new PublicClientApplication(msalConfig);
+
+initApiAuth({
+  msal: msalInstance,
+  getAccount: () =>
+    msalInstance.getActiveAccount() ?? msalInstance.getAllAccounts()[0] ?? null,
+});
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';

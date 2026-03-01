@@ -29,7 +29,10 @@ const Navbar: React.FC = () => {
       setDrawerOpen(open);
     };
 
-  const menuItems = [{ label: 'Home', path: '/' }];
+  const menuItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Blob Upload', path: '/blob-upload' },
+  ];
 
   return (
     <>
