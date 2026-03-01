@@ -9,7 +9,7 @@ const AuthButton: React.FC = () => {
 
   const handleOnClick = async () => {
     if (isSignedIn) {
-      await instance.logoutPopup();
+      await instance.logoutRedirect();
     } else {
       instance.loginRedirect(loginRequest).catch((error) => console.log(error));
     }

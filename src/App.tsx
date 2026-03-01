@@ -4,7 +4,6 @@ import MainLayout from './layouts/MainLayout';
 import ProtectedRoute from './layouts/ProtectedLayout';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Unauthorized from './pages/Unauthorized';
 import AdminHome from './pages/AdminHome';
 
 const theme = createTheme({
@@ -40,7 +39,6 @@ const App = () => {
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/login" element={<Login />} />
-            <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/" element={<Home />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/admin-home" element={<AdminHome />} />

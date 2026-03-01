@@ -29,13 +29,7 @@ const Navbar: React.FC = () => {
       setDrawerOpen(open);
     };
 
-  const menuItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Login', path: '/login' },
-    { label: 'About', path: '#' },
-    { label: 'Contact', path: '#' },
-    { label: 'Settings', path: '#' },
-  ];
+  const menuItems = [{ label: 'Home', path: '/' }];
 
   return (
     <>

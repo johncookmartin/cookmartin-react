@@ -11,10 +11,10 @@ const Login: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      await instance.loginPopup(loginRequest);
+      await instance.loginRedirect(loginRequest);
       navigate('/');
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -41,6 +41,18 @@ const Login: React.FC = () => {
           }}
         />
 
+        <Typography
+          variant="h1"
+          sx={{
+            fontSize: '5rem',
+            fontWeight: 'bold',
+            color: 'error.main',
+            margin: 0,
+          }}
+        >
+          401
+        </Typography>
+
         <Card
           sx={{
             padding: 4,
@@ -49,8 +61,13 @@ const Login: React.FC = () => {
             textAlign: 'center',
           }}
         >
+          <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+            Authorization Required
+          </Typography>
+
           <Typography variant="body1" color="textSecondary" sx={{ mb: 4 }}>
-            Sign in to your account to get started
+            You are not authorized to access this resource. Please sign in to
+            continue.
           </Typography>
 
           <Button
