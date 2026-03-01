@@ -25,7 +25,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
         with:
-          token: $${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - name: Azure Login (OIDC)
         uses: azure/login@v2
@@ -83,7 +83,6 @@ jobs:
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ steps.swa_token.outputs.token }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: ${{ env.DEPLOYMENT_ACTION }}
           app_location: ${{ env.APP_LOCATION }}
           output_location: ${{ env.OUTPUT_LOCATION }}
