@@ -1,7 +1,11 @@
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
+import ProtectedRoute from './layouts/ProtectedLayout';
 import Home from './pages/Home';
+import Login from './pages/Login';
+import Unauthorized from './pages/Unauthorized';
+import AdminHome from './pages/AdminHome';
 
 const theme = createTheme({
   palette: {
@@ -19,6 +23,9 @@ const theme = createTheme({
       primary: '#FFFFFF',
       secondary: '#B0B0B0',
     },
+    action: {
+      hover: 'rgba(255, 255, 255, 0.25)',
+    },
   },
   typography: {
     fontFamily: '"Montserrat", "Helvetica", "Arial", sans-serif',
@@ -32,7 +39,12 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route element={<MainLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/" element={<Home />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/admin-home" element={<AdminHome />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
