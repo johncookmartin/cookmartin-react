@@ -16,6 +16,10 @@ type CreateBaseQueryParams = {
   getAccount: () => AccountInfo | null;
 };
 
+type ExtraOptions = {
+  public?: boolean;
+};
+
 export function createBaseQueryWithMsal({
   baseUrl,
   scope,
@@ -24,11 +28,23 @@ export function createBaseQueryWithMsal({
 }: CreateBaseQueryParams): BaseQueryFn<
   string | FetchArgs,
   unknown,
-  FetchBaseQueryError
+  FetchBaseQueryError,
+  ExtraOptions
 > {
   const rawBaseQuery = fetchBaseQuery({ baseUrl });
 
   return async (args, api, extraOptions) => {
+    const isPublic = extraOptions?.public === true;
+
+    const enrichedArgs: FetchArgs =
+      typeof args === 'string' ? { url: args } : { ...args };
+
+    // If endpoint is public, skip auth and send request directly
+    if (isPublic) {
+      return await rawBaseQuery(enrichedArgs, api, extraOptions);
+    }
+
+    // Private endpoint: acquire token and add Authorization header
     try {
       const account = getAccount();
 
@@ -37,9 +53,6 @@ export function createBaseQueryWithMsal({
         account,
         scope,
       });
-
-      const enrichedArgs: FetchArgs =
-        typeof args === 'string' ? { url: args } : { ...args };
 
       enrichedArgs.headers = {
         ...(enrichedArgs.headers ?? {}),

@@ -1,34 +1,40 @@
-import React from 'react';
-import { Box, Button, Card, Container, Typography } from '@mui/material';
-import { useLazyWhoAmIPubQuery, useLazyWhoAmIPrivQuery } from '../redux/api';
+import React, { useState } from 'react';
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Container,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { useUploadPdfMutation } from '../redux/endpoints/blob/blobApi';
 
 const BlobUpload: React.FC = () => {
-  const [triggerPub, pubResult] = useLazyWhoAmIPubQuery();
-  const [triggerPriv, privResult] = useLazyWhoAmIPrivQuery();
+  const [uploadPdf, uploadResult] = useUploadPdfMutation();
 
-  const renderResult = (result: {
-    isUninitialized: boolean;
-    isLoading: boolean;
-    error?: unknown;
-    data?: unknown;
-  }) => {
-    if (result.isUninitialized) {
-      return 'Not called yet.';
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadPath, setUploadPath] = useState<string>('test/uploads');
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
     }
+  };
 
-    if (result.isLoading) {
-      return 'Loading...';
+  const handleUpload = async () => {
+    if (!selectedFile) return;
+
+    try {
+      const result = await uploadPdf({
+        file: selectedFile,
+        path: uploadPath,
+      }).unwrap();
+      console.log('Upload successful:', result);
+    } catch (error) {
+      console.error('Upload failed:', error);
     }
-
-    if (result.error) {
-      return JSON.stringify(result.error, null, 2);
-    }
-
-    if (result.data) {
-      return JSON.stringify(result.data, null, 2);
-    }
-
-    return 'No response body.';
   };
 
   return (
@@ -44,34 +50,55 @@ const BlobUpload: React.FC = () => {
         <Typography variant="h4">Blob Upload</Typography>
 
         <Card sx={{ p: 3 }}>
+          {' '}
           <Typography variant="h6" sx={{ mb: 2 }}>
-            Test whoAmIPub
+            Upload PDF File
           </Typography>
-          <Button
-            variant="contained"
-            onClick={() => triggerPub()}
-            disabled={pubResult.isLoading}
-          >
-            Test whoAmIPub endpoint
-          </Button>
-          <Box component="pre" sx={{ mt: 2, whiteSpace: 'pre-wrap', m: 0 }}>
-            {renderResult(pubResult)}
-          </Box>
-        </Card>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <TextField
+              label="Upload Path"
+              value={uploadPath}
+              onChange={(e) => setUploadPath(e.target.value)}
+              fullWidth
+              helperText="Destination path for the uploaded file"
+            />
 
-        <Card sx={{ p: 3 }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Test whoAmIPriv
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={() => triggerPriv()}
-            disabled={privResult.isLoading}
-          >
-            Test whoAmIPriv endpoint
-          </Button>
-          <Box component="pre" sx={{ mt: 2, whiteSpace: 'pre-wrap', m: 0 }}>
-            {renderResult(privResult)}
+            <Button variant="outlined" component="label" fullWidth>
+              {selectedFile ? selectedFile.name : 'Select PDF File'}
+              <input
+                type="file"
+                hidden
+                accept=".pdf,application/pdf"
+                onChange={handleFileChange}
+              />
+            </Button>
+
+            <Button
+              variant="contained"
+              onClick={handleUpload}
+              disabled={!selectedFile || uploadResult.isLoading}
+              fullWidth
+            >
+              {uploadResult.isLoading ? 'Uploading...' : 'Upload PDF'}
+            </Button>
+
+            {uploadResult.isSuccess && uploadResult.data && (
+              <Alert severity="success">
+                <Typography variant="body2">Upload successful!</Typography>
+                <Typography variant="caption" component="div">
+                  URL: {uploadResult.data.url}
+                </Typography>
+                <Typography variant="caption" component="div">
+                  Path: {uploadResult.data.path}
+                </Typography>
+              </Alert>
+            )}
+
+            {uploadResult.isError && (
+              <Alert severity="error">
+                Upload failed: {JSON.stringify(uploadResult.error)}
+              </Alert>
+            )}
           </Box>
         </Card>
       </Box>

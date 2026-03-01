@@ -42,8 +42,8 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Home />} />
             <Route element={<ProtectedRoute />}>
-              <Route path="/admin-home" element={<AdminHome />} />
               <Route path="/blob-upload" element={<BlobUpload />} />
+              <Route path="/admin-home" element={<AdminHome />} />
             </Route>
           </Route>
         </Routes>

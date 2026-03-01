@@ -43,19 +43,7 @@ export const api = createApi({
 
     return baseQuery(args, api, extraOptions);
   },
-  endpoints: (builder) => ({
-    whoAmIPub: builder.query<unknown, void>({
-      query: () => ({ url: '/api/test/public', method: 'GET' }),
-    }),
-    whoAmIPriv: builder.query<unknown, void>({
-      query: () => ({ url: '/api/test/private', method: 'GET' }),
-    }),
-  }),
+  // Base API with empty endpoints - use injectEndpoints() in feature modules
+  // See src/redux/endpoints/test/testApi.ts for example
+  endpoints: () => ({}),
 });
-
-export const {
-  useWhoAmIPubQuery,
-  useWhoAmIPrivQuery,
-  useLazyWhoAmIPubQuery,
-  useLazyWhoAmIPrivQuery,
-} = api;
