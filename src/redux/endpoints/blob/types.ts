@@ -8,6 +8,7 @@ export interface UploadResumeResponse {
   ok: boolean;
   url: string;
   path: string;
+  qrCode: string;
 }
 
 export interface BlobErrorResponse {

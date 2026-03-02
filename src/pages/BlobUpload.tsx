@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, Box, Button, Card, Container, Typography } from '@mui/material';
+import DownloadIcon from '@mui/icons-material/Download';
 import {
   useUploadJohnResumeMutation,
   useUploadJacquieResumeMutation,
@@ -13,6 +14,28 @@ const BlobUpload: React.FC = () => {
 
   const [johnResumeFile, setJohnResumeFile] = useState<File | null>(null);
   const [jacquieResumeFile, setJacquieResumeFile] = useState<File | null>(null);
+
+  const downloadQRCode = (base64: string, filename: string) => {
+    const dataUrl = `data:image/png;base64,${base64}`;
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDownloadJohnQR = () => {
+    if (johnResumeResult.data?.qrCode) {
+      downloadQRCode(johnResumeResult.data.qrCode, 'john-resume-qr.png');
+    }
+  };
+
+  const handleDownloadJacquieQR = () => {
+    if (jacquieResumeResult.data?.qrCode) {
+      downloadQRCode(jacquieResumeResult.data.qrCode, 'jacquie-resume-qr.png');
+    }
+  };
 
   const handleJohnFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -101,6 +124,38 @@ const BlobUpload: React.FC = () => {
                 <Typography variant="caption" component="div">
                   Path: {johnResumeResult.data.path}
                 </Typography>
+                {johnResumeResult.data.qrCode && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 2,
+                      mt: 2,
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={`data:image/png;base64,${johnResumeResult.data.qrCode}`}
+                      alt="QR Code"
+                      sx={{
+                        maxWidth: '200px',
+                        width: '100%',
+                        height: 'auto',
+                        border: '1px solid rgba(0, 0, 0, 0.12)',
+                        borderRadius: 1,
+                      }}
+                    />
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<DownloadIcon />}
+                      onClick={handleDownloadJohnQR}
+                    >
+                      Download QR Code
+                    </Button>
+                  </Box>
+                )}
               </Alert>
             )}
 
@@ -147,6 +202,38 @@ const BlobUpload: React.FC = () => {
                 <Typography variant="caption" component="div">
                   Path: {jacquieResumeResult.data.path}
                 </Typography>
+                {jacquieResumeResult.data.qrCode && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 2,
+                      mt: 2,
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={`data:image/png;base64,${jacquieResumeResult.data.qrCode}`}
+                      alt="QR Code"
+                      sx={{
+                        maxWidth: '200px',
+                        width: '100%',
+                        height: 'auto',
+                        border: '1px solid rgba(0, 0, 0, 0.12)',
+                        borderRadius: 1,
+                      }}
+                    />
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<DownloadIcon />}
+                      onClick={handleDownloadJacquieQR}
+                    >
+                      Download QR Code
+                    </Button>
+                  </Box>
+                )}
               </Alert>
             )}
 
