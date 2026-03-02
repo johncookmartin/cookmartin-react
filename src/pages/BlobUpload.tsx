@@ -96,7 +96,20 @@ const BlobUpload: React.FC = () => {
             Upload John's Resume
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button variant="outlined" component="label" fullWidth>
+            <Button
+              variant="outlined"
+              component="label"
+              fullWidth
+              sx={{
+                borderWidth: 2,
+                borderColor: 'primary.main',
+                backgroundColor: 'action.hover',
+                '&:hover': {
+                  borderWidth: 2,
+                  backgroundColor: 'action.selected',
+                },
+              }}
+            >
               {johnResumeFile ? johnResumeFile.name : 'Select Resume File'}
               <input
                 type="file"
@@ -172,7 +185,20 @@ const BlobUpload: React.FC = () => {
             Upload Jacquie's Resume
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button variant="outlined" component="label" fullWidth>
+            <Button
+              variant="outlined"
+              component="label"
+              fullWidth
+              sx={{
+                borderWidth: 2,
+                borderColor: 'primary.main',
+                backgroundColor: 'action.hover',
+                '&:hover': {
+                  borderWidth: 2,
+                  backgroundColor: 'action.selected',
+                },
+              }}
+            >
               {jacquieResumeFile
                 ? jacquieResumeFile.name
                 : 'Select Resume File'}
