@@ -13,9 +13,11 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AuthButton from './AuthButton';
+import { useIsAuthenticated } from '@azure/msal-react';
 
 const Navbar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const isAuthenticated = useIsAuthenticated();
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -31,7 +33,13 @@ const Navbar: React.FC = () => {
 
   const menuItems = [
     { label: 'Home', path: '/' },
-    { label: 'Blob Upload', path: '/blob-upload' },
+    {
+      label: 'Oscars App',
+      path: 'https://gray-smoke-085dcbb0f.4.azurestaticapps.net/',
+    },
+    ...(isAuthenticated
+      ? [{ label: 'Blob Upload', path: '/blob-upload' }]
+      : []),
   ];
 
   return (
