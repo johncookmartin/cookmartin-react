@@ -16,6 +16,8 @@ env:
   API_LOCATION: ''
   NODE_VERSION: '20'
   NODE_CACHE: npm
+  VITE_OSCAR_URL: 'https://gray-smoke-085dcbb0f.4.azurestaticapps.net/'
+  VITE_NOTECARD_URL: 'https://wonderful-smoke-0656e2d0f.4.azurestaticapps.net/'
 
 jobs:
   build_and_deploy:
@@ -72,6 +74,8 @@ jobs:
           VITE_REDIRECT_LOGOUT_URI=${{ secrets.VITE_REDIRECT_LOGOUT_URI }}
           VITE_API_SCOPE=${{ secrets.VITE_API_SCOPE }}
           VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
+          VITE_OSCAR_URL=${{ env.VITE_OSCAR_URL }}
+          VITE_NOTECARD_URL=${{ env.VITE_NOTECARD_URL }}
           EOF
 
       - name: Install dependencies

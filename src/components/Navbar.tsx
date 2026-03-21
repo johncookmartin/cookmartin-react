@@ -17,6 +17,8 @@ import { useIsAuthenticated } from '@azure/msal-react';
 
 const Navbar: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const oscar_url = import.meta.env.VITE_OSCAR_URL as string;
+  const notecard_url = import.meta.env.VITE_NOTECARD_URL as string;
   const isAuthenticated = useIsAuthenticated();
 
   const toggleDrawer =
@@ -34,8 +36,12 @@ const Navbar: React.FC = () => {
   const menuItems = [
     { label: 'Home', path: '/' },
     {
+      label: 'Note Card App',
+      path: notecard_url,
+    },
+    {
       label: 'Oscars App',
-      path: 'https://gray-smoke-085dcbb0f.4.azurestaticapps.net/',
+      path: oscar_url,
     },
     ...(isAuthenticated
       ? [{ label: 'Blob Upload', path: '/blob-upload' }]
