@@ -4,6 +4,7 @@ import CookMartinLogo from '../assets/CookMartinLogo.png';
 
 const Home: React.FC = () => {
   // adding comment to test CI/CD
+  // adding another comment to test
   return (
     <Container maxWidth="sm">
       <Box
