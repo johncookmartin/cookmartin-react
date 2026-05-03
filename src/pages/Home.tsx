@@ -3,6 +3,7 @@ import { Box, Container, Typography } from '@mui/material';
 import CookMartinLogo from '../assets/CookMartinLogo.png';
 
 const Home: React.FC = () => {
+  // adding comment to test CI/CD
   return (
     <Container maxWidth="sm">
       <Box
